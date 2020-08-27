@@ -54,3 +54,11 @@ const editaCliente = (id, cpf, nome) => {
   })
 }
 
+export{
+  editaCliente,
+  detalhaCliente,
+  cadastrarClientes,
+  listarClientes,
+  deletaCliente
+}
+
