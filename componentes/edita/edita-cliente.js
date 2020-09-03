@@ -1,51 +1,55 @@
-const pegaURL = new URL(window.location)
+import {detalhaCliente,editaCliente} from '../../api/cliente'
+import validaCPF from '../valida/validaCPF'
 
-const id = pegaURL.searchParams.get('id')
+const eventoForm = form =>{
 
-const inputCPF = document.querySelector('[data-cpf]')
-const inputNome = document.querySelector('[data-nome]')
+    const pegaURL = new URL(window.location)
 
-detalhaCliente(id).then( dados => {
-    inputCPF.value = dados[0].cpf 
-    inputNome.value = dados[0].nome
-})
+    const id = pegaURL.searchParams.get('id')
 
-const formEdicao = document.querySelector('[data-form]')
+    const inputCPF = form.querySelector('[data-cpf]')
+    const inputNome = form.querySelector('[data-nome]')
 
-const alerta = (classe, mensagem) => { 
-    const linha = document.createElement('tr');
-
-    const conteudoLinha = `
-    <div class="${classe}">${mensagem}</div>
-    
-`
-  
-    linha.innerHTML = conteudoLinha;
-    return linha;
-} 
-formEdicao.addEventListener('submit', event => { 
-    event.preventDefault()
-
-    if(!validaCPF(inputCPF.value)){
-        alert("ESSE NÃO EXISTE")
-        return 
-    }
-
-    editaCliente(id, inputCPF.value, inputNome.value)
-    .then( resposta => { 
-        if( resposta.status === 200){
-            formEdicao.appendChild(alerta(
-                "alert alert-success",
-                "CLIENTE EDITADO COM SUCESSO !"
-            ))
-        } else { 
-            formEdicao.appendChild(alerta(
-                "alert alert-warning",
-                "O CLIENTE NÃO PODE SER EDITADO !"
-            ))
-        }
+    detalhaCliente(id).then( dados => {
+        inputCPF.value = dados[0].cpf 
+        inputNome.value = dados[0].nome
     })
-    
-    
 
-})
+    const alerta = (classe, mensagem) => { 
+        const linha = document.createElement('section');
+
+        const conteudoLinha = `
+        <div class="${classe}">${mensagem}</div>
+        
+    `
+    
+        linha.innerHTML = conteudoLinha;
+        return linha
+    } 
+    form.addEventListener('submit', event => { 
+        event.preventDefault()
+
+        if(!validaCPF(inputCPF.value)){
+            alert("Esse CPF não existe")
+            return 
+        }
+
+        editaCliente(id, inputCPF.value, inputNome.value)
+        .then(() => {
+             form.appendChild(alerta(
+                "alert alert-success",
+                "Cliente editado com sucesso !"))
+             } 
+        )
+        .catch (() => {
+             form.appendChild(alerta(
+                "alert alert-warning",
+               "Erro ao editar cliente!")
+            )
+             
+             }) 
+     })
+
+}
+
+export default eventoForm

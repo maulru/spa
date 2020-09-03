@@ -3,10 +3,7 @@ import {cadastrarClientes} from '../../api/cliente'
 
 const eventoEnvia = (form) =>{
 
-//const formCadastroCliente = document.querySelector("[data-form]")
-
-form.addEventListener("submit",
-    event => { 
+form.addEventListener("submit", (event) => { 
             event.preventDefault()
 
             const nome = event.target.querySelector("[data-nome]").value
@@ -18,9 +15,7 @@ form.addEventListener("submit",
                     alert('O CPF não é válido')
                 }
                     
-            }
-        )
+            })
 }
-
 
 export default eventoEnvia
